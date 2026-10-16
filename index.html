@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Laboratorios</title>
+    <style>
+        :root {
+            --primary: #0056b3;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --dark: #212529;
+            --light: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eef2f5;
+            margin: 0;
+            padding: 0;
+            color: var(--dark);
+        }
+
+        nav {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav button {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .header-title {
+            text-align: center;
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.85em;
+            display: inline-block;
+        }
+        .bg-operativo { background-color: #d4edda; color: #155724; }
+        .bg-falla { background-color: #f8d7da; color: #721c24; }
+        .bg-reparacion { background-color: #fff3cd; color: #856404; }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 0.95em;
+        }
+        .btn-primary { background-color: var(--primary); color: white; }
+        .btn-secondary { background-color: #6c757d; color: white; }
+
+        form label { display: block; margin-top: 10px; font-weight: bold; font-size: 0.9em; }
+        form select, form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        .hidden { display: none; }
+
+        /* Estilos del Panel Técnico */
+        .report-item {
+            border-left: 5px solid var(--danger);
+            background: #fff;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <span id="navTitle">Servicio de Laboratorio</span>
+        <button onclick="toggleVista()" id="btnToggle">Modo Técnico</button>
+    </nav>
+
+    <div class="container">
+
+        <!-- ================= VISTA ESTUDIANTE / QR ================= -->
+        <div id="vistaEstudiante">
+            <div class="card">
+                <div class="header-title">
+                    <p style="margin:0; font-size: 0.8em; color: #6c757d;">EQUIPO REGISTRADO</p>
+                    <h2 id="eqNombre" style="margin:5px 0; color: var(--primary);">Osciloscopio Digital</h2>
+                    <p id="eqCodigo" style="margin:0; font-weight: bold;">LAB-ELEC-OSC-04</p>
+                </div>
+
+                <div class="info-row">
+                    <strong>Ubicación:</strong> <span id="eqUbicacion">Mesa #4 - Lab. Electrónica</span>
+                </div>
+                <div class="info-row">
+                    <strong>Modelo:</strong> <span id="eqModelo">Tektronix TBS1052B</span>
+                </div>
+                <div class="info-row">
+                    <strong>Estado:</strong> <span id="eqEstado" class="badge bg-operativo">OPERATIVO</span>
+                </div>
+
+                <button class="btn btn-secondary" onclick="alert('Abriendo manual de usuario en PDF...')">
+                    📄 Ver Manual de Uso y Calibración
+                </button>
+            </div>
+
+            <div class="card">
+                <h3>🚨 Reportar Falla Técnica</h3>
+                <form id="formReporte" onsubmit="guardarReporte(event)">
+                    <label>Categoría de la falla:</label>
+                    <select id="categoriaFalla" required>
+                        <option value="">-- Selecciona --</option>
+                        <option value="Canal / Entrada defectuosa">Canal / Entrada defectuosa</option>
+                        <option value="Falla en Pantalla">Falla en Pantalla / Display</option>
+                        <option value="No Enciende">No Enciende / Sin Alimentación</option>
+                        <option value="Descalibrado">Descalibrado / Error de Medición</option>
+                        <option value="Punta / Cable Dañado">Punta de Prueba / Cable Dañado</option>
+                    </select>
+
+                    <label>Descripción del problema:</label>
+                    <textarea id="descFalla" rows="3" placeholder="Describe brevemente lo que ocurre..." required></textarea>
+
+                    <button type="submit" class="btn btn-primary">Enviar Reporte al Técnico</button>
+                </form>
+                <div id="msgExito" class="hidden" style="color: green; text-align:center; font-weight:bold; margin-top:10px;">
+                    ✅ Reporte registrado correctamente.
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= VISTA TÉCNICO / DASHBOARD ================= -->
+        <div id="vistaTecnico" class="hidden">
+            <div class="card">
+                <h2>📊 Dashboard de Mantenimiento</h2>
+                <p>Lista de reportes registrados en el laboratorio:</p>
+                <div id="listaReportes">
+                    <!-- Los reportes se cargan dinámicamente -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Memoria local del sistema (Simulación de Base de Datos)
+        let reportes = JSON.parse(localStorage.getItem('reportes_lab')) || [];
+
+        function guardarReporte(e) {
+            e.preventDefault();
+            const nuevoReporte = {
+                id: Date.now(),
+                equipo: document.getElementById('eqCodigo').innerText,
+                nombre: document.getElementById('eqNombre').innerText,
+                categoria: document.getElementById('categoriaFalla').value,
+                descripcion: document.getElementById('descFalla').value,
+                fecha: new Date().toLocaleString(),
+                estado: 'Pendiente'
+            };
+
+            reportes.push(nuevoReporte);
+            localStorage.setItem('reportes_lab', JSON.stringify(reportes));
+
+            document.getElementById('formReporte').reset();
+            document.getElementById('msgExito').classList.remove('hidden');
+            document.getElementById('eqEstado').innerText = "CON FALLA";
+            document.getElementById('eqEstado').className = "badge bg-falla";
+
+            setTimeout(() => {
+                document.getElementById('msgExito').classList.add('hidden');
+            }, 3000);
+        }
+
+        function renderizarReportes() {
+            const contenedor = document.getElementById('listaReportes');
+            contenedor.innerHTML = '';
+
+            if (reportes.length === 0) {
+                contenedor.innerHTML = '<p style="text-align:center; color:#777;">No hay fallas reportadas. ¡Todo está operativo!</p>';
+                return;
+            }
+
+            reportes.forEach((rep) => {
+                const item = document.createElement('div');
+                item.className = 'report-item';
+                item.innerHTML = `
+                    <strong>${rep.nombre} (${rep.equipo})</strong><br>
+                    <small>📅 ${rep.fecha}</small><br>
+                    <span style="color:var(--danger); font-weight:bold;">⚠️ ${rep.categoria}</span><br>
+                    <p style="margin:5px 0;">"${rep.descripcion}"</p>
+                    <button class="btn btn-secondary" style="padding:5px; font-size:0.8em;" onclick="resolverReporte(${rep.id})">
+                        ✅ Marcar como Reparado / Resuelto
+                    </button>
+                `;
+                contenedor.appendChild(item);
+            });
+        }
+
+        function resolverReporte(id) {
+            reportes = reportes.filter(r => r.id !== id);
+            localStorage.setItem('reportes_lab', JSON.stringify(reportes));
+            renderizarReportes();
+            document.getElementById('eqEstado').innerText = "OPERATIVO";
+            document.getElementById('eqEstado').className = "badge bg-operativo";
+        }
+
+        function toggleVista() {
+            const vEstudiante = document.getElementById('vistaEstudiante');
+            const vTecnico = document.getElementById('vistaTecnico');
+            const btn = document.getElementById('btnToggle');
+
+            if (vEstudiante.classList.contains('hidden')) {
+                vEstudiante.classList.remove('hidden');
+                vTecnico.classList.add('hidden');
+                btn.innerText = "Modo Técnico";
+            } else {
+                vEstudiante.classList.add('hidden');
+                vTecnico.classList.remove('hidden');
+                btn.innerText = "Modo Estudiante";
+                renderizarReportes();
+            }
+        }
+    </script>
+</body>
+</html>
