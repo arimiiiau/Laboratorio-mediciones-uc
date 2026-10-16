@@ -3,270 +3,311 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gestión de Laboratorios</title>
+    <title>SGDM - Laboratorios UC</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #0056b3;
-            --success: #28a745;
-            --warning: #ffc107;
-            --danger: #dc3545;
-            --dark: #212529;
-            --light: #f8f9fa;
+            --bg-body: #edf2f7;
+            --sidebar-bg: #0f172a;
+            --sidebar-hover: #1e293b;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --success-bg: #dcfce7; --success-text: #15803d;
+            --warning-bg: #fef3c7; --warning-text: #b45309;
+            --danger-bg: #fee2e2; --danger-text: #b91c1c;
+            --banner-bg: #1e3a8a;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #eef2f5;
-            margin: 0;
-            padding: 0;
-            color: var(--dark);
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); display: flex; min-height: 100vh; }
 
-        nav {
-            background-color: var(--primary);
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        /* SIDEBAR */
+        .sidebar { width: 250px; background-color: var(--sidebar-bg); color: #f8fafc; padding: 20px 15px; display: flex; flex-direction: column; flex-shrink: 0; }
+        .sidebar-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 30px; padding: 0 10px; }
+        .sidebar-brand img { width: 38px; height: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+        .sidebar-brand .title { font-weight: 700; font-size: 1.05rem; color: #ffffff; line-height: 1.2; }
+        .sidebar-brand .subtitle { font-size: 0.75rem; color: #94a3b8; font-weight: 400; }
+        
+        .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+        .sidebar-menu li a { display: flex; align-items: center; gap: 12px; padding: 12px 15px; color: #94a3b8; text-decoration: none; border-radius: 8px; font-weight: 500; font-size: 0.9rem; transition: 0.2s; }
+        .sidebar-menu li.active a, .sidebar-menu li a:hover { background-color: var(--sidebar-hover); color: #ffffff; }
+        .sidebar-footer { margin-top: auto; padding: 10px; font-size: 0.75rem; color: #64748b; border-top: 1px solid #334155; }
 
-        nav button {
-            background: white;
-            color: var(--primary);
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+        /* MAIN CONTENT */
+        .main-content { flex-grow: 1; padding: 25px 30px; overflow-y: auto; }
+        .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .top-header h1 { font-size: 1.4rem; color: var(--text-main); font-weight: 700; }
+        .user-badge { background: #ffffff; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 8px; }
 
-        .container {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 0 15px;
-        }
+        /* BANNER */
+        .banner-stand { background: linear-gradient(135deg, var(--banner-bg), #1d4ed8); color: #ffffff; padding: 16px 20px; border-radius: 12px; margin-bottom: 25px; display: flex; align-items: center; gap: 15px; box-shadow: 0 4px 12px rgba(30,58,138,0.25); }
+        .banner-icon { font-size: 1.8rem; background: rgba(255,255,255,0.15); padding: 10px; border-radius: 10px; }
+        .banner-text h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 2px; }
+        .banner-text p { font-size: 0.83rem; opacity: 0.9; }
 
-        .card {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-            margin-bottom: 20px;
-        }
+        /* METRICS GRID */
+        .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 25px; }
+        .metric-card { background: var(--card-bg); padding: 18px; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); display: flex; justify-content: space-between; align-items: center; }
+        .metric-info .label { font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px; }
+        .metric-info .value { font-size: 1.6rem; font-weight: 800; margin-top: 4px; color: var(--text-main); }
+        .metric-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .icon-blue { background: #e0f2fe; color: #0284c7; }
+        .icon-green { background: #dcfce7; color: #16a34a; }
+        .icon-yellow { background: #fef3c7; color: #d97706; }
+        .icon-red { background: #fee2e2; color: #dc2626; }
 
-        .header-title {
-            text-align: center;
-            border-bottom: 2px solid var(--light);
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-        }
+        /* CONTENT GRID */
+        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+        .panel-card { background: var(--card-bg); border-radius: 12px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
+        .panel-title { font-size: 1rem; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; color: var(--text-main); }
 
-        .badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.85em;
-            display: inline-block;
-        }
-        .bg-operativo { background-color: #d4edda; color: #155724; }
-        .bg-falla { background-color: #f8d7da; color: #721c24; }
-        .bg-reparacion { background-color: #fff3cd; color: #856404; }
+        /* TABLE */
+        .table-responsive { width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+        th { text-align: left; padding: 12px 10px; color: var(--text-muted); font-size: 0.78rem; text-transform: uppercase; border-bottom: 2px solid #f1f5f9; font-weight: 700; }
+        td { padding: 12px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+        tr:hover { background-color: #f8fafc; }
 
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 0.95em;
-        }
+        /* BADGES */
+        .status-badge { padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; display: inline-block; }
+        .status-operativo { background: var(--success-bg); color: var(--success-text); }
+        .status-revision { background: var(--warning-bg); color: var(--warning-text); }
+        .status-falla { background: var(--danger-bg); color: var(--danger-text); }
 
-        .btn {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-            font-size: 0.95em;
-        }
-        .btn-primary { background-color: var(--primary); color: white; }
-        .btn-secondary { background-color: #6c757d; color: white; }
+        /* FORM */
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-main); margin-bottom: 5px; }
+        .form-control { width: 100%; padding: 10px; font-size: 0.85rem; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc; font-family: inherit; }
+        .form-control:focus { outline: none; border-color: var(--primary); background: #ffffff; }
+        textarea.form-control { resize: none; }
+        .btn-submit { width: 100%; padding: 12px; background: var(--sidebar-bg); color: #ffffff; border: none; border-radius: 8px; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
+        .btn-submit:hover { background: var(--primary-dark); }
 
-        form label { display: block; margin-top: 10px; font-weight: bold; font-size: 0.9em; }
-        form select, form textarea {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            box-sizing: border-box;
-        }
-
-        .hidden { display: none; }
-
-        /* Estilos del Panel Técnico */
-        .report-item {
-            border-left: 5px solid var(--danger);
-            background: #fff;
-            padding: 12px;
-            margin-bottom: 10px;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        @media (max-width: 1024px) {
+            .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+            .dashboard-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <nav>
-        <span id="navTitle">Servicio de Laboratorio</span>
-        <button onclick="toggleVista()" id="btnToggle">Modo Técnico</button>
-    </nav>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <img src="https://upload.wikimedia.org/wikipedia_commons/0/0a/Escudo_de_la_Universidad_de_Carabobo.svg" alt="UC Logo" onerror="this.src='https://via.placeholder.com/40?text=UC'">
+            <div>
+                <div class="title">SGDM Lab UC</div>
+                <div class="subtitle">Facultad de Ingeniería</div>
+            </div>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="active"><a href="#"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+            <li><a href="#"><i class="fa-solid fa-boxes-stacked"></i> Inventario de Equipos</a></li>
+            <li><a href="#"><i class="fa-solid fa-qrcode"></i> Generador de QR</a></li>
+            <li><a href="#"><i class="fa-solid fa-screwdriver-wrench"></i> Mantenimiento</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            Prototipo de Servicio Comunitario v1.0<br>
+            Lab. de Mediciones Eléctricas
+        </div>
+    </aside>
 
-    <div class="container">
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        
+        <div class="top-header">
+            <h1>Panel de Control de Laboratorios</h1>
+            <div class="user-badge">
+                <i class="fa-solid fa-user-shield"></i> Admin / Técnico UC
+            </div>
+        </div>
 
-        <!-- ================= VISTA ESTUDIANTE / QR ================= -->
-        <div id="vistaEstudiante">
-            <div class="card">
-                <div class="header-title">
-                    <p style="margin:0; font-size: 0.8em; color: #6c757d;">EQUIPO REGISTRADO</p>
-                    <h2 id="eqNombre" style="margin:5px 0; color: var(--primary);">Osciloscopio Digital</h2>
-                    <p id="eqCodigo" style="margin:0; font-weight: bold;">LAB-ELEC-OSC-04</p>
-                </div>
+        <!-- BANNER -->
+        <div class="banner-stand">
+            <div class="banner-icon"><i class="fa-solid fa-grip"></i></div>
+            <div class="banner-text">
+                33 Demostración de Stand:
+                <p>Simula el reporte de un fallo escaneando un equipo o completando el formulario exprés en el panel lateral.</p>
+            </div>
+        </div>
 
-                <div class="info-row">
-                    <strong>Ubicación:</strong> <span id="eqUbicacion">Mesa #4 - Lab. Electrónica</span>
+        <!-- METRICS -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-info">
+                    <div class="label">Total Activos</div>
+                    <div class="value" id="totalActivos">24</div>
                 </div>
-                <div class="info-row">
-                    <strong>Modelo:</strong> <span id="eqModelo">Tektronix TBS1052B</span>
+                <div class="metric-icon icon-blue"><i class="fa-solid fa-plug"></i></div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-info">
+                    <div class="label">Operativos</div>
+                    <div class="value" id="totalOperativos">18</div>
                 </div>
-                <div class="info-row">
-                    <strong>Estado:</strong> <span id="eqEstado" class="badge bg-operativo">OPERATIVO</span>
+                <div class="metric-icon icon-green"><i class="fa-solid fa-circle-check"></i></div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-info">
+                    <div class="label">En Revisión</div>
+                    <div class="value" id="totalRevision">4</div>
                 </div>
+                <div class="metric-icon icon-yellow"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-info">
+                    <div class="label">Fuera de Servicio</div>
+                    <div class="value" id="totalFalla">2</div>
+                </div>
+                <div class="metric-icon icon-red"><i class="fa-solid fa-circle-xmark"></i></div>
+            </div>
+        </div>
 
-                <button class="btn btn-secondary" onclick="alert('Abriendo manual de usuario en PDF...')">
-                    📄 Ver Manual de Uso y Calibración
-                </button>
+        <!-- GRID PRINCIPAL -->
+        <div class="dashboard-grid">
+            
+            <!-- TABLA -->
+            <div class="panel-card">
+                <div class="panel-title">
+                    <i class="fa-solid fa-list-check"></i> Estado de Equipos en Laboratorio
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Cód. QR</th>
+                                <th>Equipo</th>
+                                <th>Ubicación</th>
+                                <th>Estado</th>
+                                <th>Último Reporte</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaCuerpo">
+                            <!-- Filas generadas dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
-            <div class="card">
-                <h3>🚨 Reportar Falla Técnica</h3>
-                <form id="formReporte" onsubmit="guardarReporte(event)">
-                    <label>Categoría de la falla:</label>
-                    <select id="categoriaFalla" required>
-                        <option value="">-- Selecciona --</option>
-                        <option value="Canal / Entrada defectuosa">Canal / Entrada defectuosa</option>
-                        <option value="Falla en Pantalla">Falla en Pantalla / Display</option>
-                        <option value="No Enciende">No Enciende / Sin Alimentación</option>
-                        <option value="Descalibrado">Descalibrado / Error de Medición</option>
-                        <option value="Punta / Cable Dañado">Punta de Prueba / Cable Dañado</option>
-                    </select>
+            <!-- FORMULARIO EXPRÉS -->
+            <div class="panel-card">
+                <div class="panel-title">
+                    <i class="fa-solid fa-bolt"></i> Reporte Exprés por QR
+                </div>
+                <form id="formExpres" onsubmit="procesarReporte(event)">
+                    <div class="form-group">
+                        <label>Seleccionar Equipo</label>
+                        <select class="form-control" id="selectEquipo" required>
+                            <option value="">-- Seleccionar ID o Escanear --</option>
+                        </select>
+                    </div>
 
-                    <label>Descripción del problema:</label>
-                    <textarea id="descFalla" rows="3" placeholder="Describe brevemente lo que ocurre..." required></textarea>
+                    <div class="form-group">
+                        <label>Síntoma Detectado</label>
+                        <select class="form-control" id="selectSintoma" required>
+                            <option value="No enciende / Sin alimentación">No enciende / Sin alimentación</option>
+                            <option value="Canal / Entrada defectuosa">Canal / Entrada defectuosa</option>
+                            <option value="Descalibrado / Error de lectura">Descalibrado / Error de lectura</option>
+                            <option value="Display / Pantalla dañada">Display / Pantalla dañada</option>
+                            <option value="Bornes / Puntas rotas">Bornes / Puntas rotas</option>
+                        </select>
+                    </div>
 
-                    <button type="submit" class="btn btn-primary">Enviar Reporte al Técnico</button>
+                    <div class="form-group">
+                        <label>Detalles Adicionales</label>
+                        <textarea class="form-control" id="textDetalles" rows="3" placeholder="Ej: El canal A presenta ruido excesivo al medir 5V..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit">
+                        <i class="fa-solid fa-paper-plane"></i> Enviar Reporte
+                    </button>
                 </form>
-                <div id="msgExito" class="hidden" style="color: green; text-align:center; font-weight:bold; margin-top:10px;">
-                    ✅ Reporte registrado correctamente.
-                </div>
             </div>
+
         </div>
 
-        <!-- ================= VISTA TÉCNICO / DASHBOARD ================= -->
-        <div id="vistaTecnico" class="hidden">
-            <div class="card">
-                <h2>📊 Dashboard de Mantenimiento</h2>
-                <p>Lista de reportes registrados en el laboratorio:</p>
-                <div id="listaReportes">
-                    <!-- Los reportes se cargan dinámicamente -->
-                </div>
-            </div>
-        </div>
-
-    </div>
+    </main>
 
     <script>
-        // Memoria local del sistema (Simulación de Base de Datos)
-        let reportes = JSON.parse(localStorage.getItem('reportes_lab')) || [];
+        // DATOS INICIALES BASADOS EN EL INVENTARIO REAL DEL LAB DE MEDICIONES
+        let equipos = [
+            { id: "QR-OSC-01", nombre: "Osciloscopio Tektronix 100MHz", ubicacion: "Lab Mediciones A", estado: "Operativo", reporte: "Sin fallas" },
+            { id: "QR-FNT-03", nombre: "Fuente DC Regulada 30V/5A", ubicacion: "Lab Mediciones B", estado: "En Revisión", reporte: "Canal 2 no regula voltaje" },
+            { id: "QR-PC-12", nombre: "PC Dell OptiPlex (Lab Soft)", ubicacion: "Lab Computación 1", estado: "Fuera de Servicio", reporte: "Pantalla azul recurrente" },
+            { id: "QR-MUL-08", nombre: "Multímetro Digital Fluke", ubicacion: "Lab Mediciones A", estado: "Operativo", reporte: "Sin fallas" },
+            { id: "QR-TEL-01", nombre: "Telurómetro Megger DET4", ubicacion: "Estante Especiales", estado: "Operativo", reporte: "Sin fallas" },
+            { id: "QR-GAL-02", nombre: "Galvanómetro D'Arsonval", ubicacion: "Estante A", estado: "En Revisión", reporte: "Falta ajuste de cero" }
+        ];
 
-        function guardarReporte(e) {
-            e.preventDefault();
-            const nuevoReporte = {
-                id: Date.now(),
-                equipo: document.getElementById('eqCodigo').innerText,
-                nombre: document.getElementById('eqNombre').innerText,
-                categoria: document.getElementById('categoriaFalla').value,
-                descripcion: document.getElementById('descFalla').value,
-                fecha: new Date().toLocaleString(),
-                estado: 'Pendiente'
-            };
-
-            reportes.push(nuevoReporte);
-            localStorage.setItem('reportes_lab', JSON.stringify(reportes));
-
-            document.getElementById('formReporte').reset();
-            document.getElementById('msgExito').classList.remove('hidden');
-            document.getElementById('eqEstado').innerText = "CON FALLA";
-            document.getElementById('eqEstado').className = "badge bg-falla";
-
-            setTimeout(() => {
-                document.getElementById('msgExito').classList.add('hidden');
-            }, 3000);
+        function actualizarContadores() {
+            document.getElementById('totalActivos').innerText = equipos.length;
+            document.getElementById('totalOperativos').innerText = equipos.filter(e => e.estado === 'Operativo').length;
+            document.getElementById('totalRevision').innerText = equipos.filter(e => e.estado === 'En Revisión').length;
+            document.getElementById('totalFalla').innerText = equipos.filter(e => e.estado === 'Fuera de Servicio').length;
         }
 
-        function renderizarReportes() {
-            const contenedor = document.getElementById('listaReportes');
-            contenedor.innerHTML = '';
+        function renderizarTabla() {
+            const tbody = document.getElementById('tablaCuerpo');
+            const select = document.getElementById('selectEquipo');
+            
+            tbody.innerHTML = '';
+            select.innerHTML = '<option value="">-- Seleccionar ID o Escanear --</option>';
 
-            if (reportes.length === 0) {
-                contenedor.innerHTML = '<p style="text-align:center; color:#777;">No hay fallas reportadas. ¡Todo está operativo!</p>';
-                return;
-            }
+            equipos.forEach(eq => {
+                // Llenar tabla
+                let badgeClass = "status-operativo";
+                if(eq.estado === "En Revisión") badgeClass = "status-revision";
+                if(eq.estado === "Fuera de Servicio") badgeClass = "status-falla";
 
-            reportes.forEach((rep) => {
-                const item = document.createElement('div');
-                item.className = 'report-item';
-                item.innerHTML = `
-                    <strong>${rep.nombre} (${rep.equipo})</strong><br>
-                    <small>📅 ${rep.fecha}</small><br>
-                    <span style="color:var(--danger); font-weight:bold;">⚠️ ${rep.categoria}</span><br>
-                    <p style="margin:5px 0;">"${rep.descripcion}"</p>
-                    <button class="btn btn-secondary" style="padding:5px; font-size:0.8em;" onclick="resolverReporte(${rep.id})">
-                        ✅ Marcar como Reparado / Resuelto
-                    </button>
+                let tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${eq.id}</strong></td>
+                    <td>${eq.nombre}</td>
+                    <td>${eq.ubicacion}</td>
+                    <td><span class="status-badge ${badgeClass}">${eq.estado}</span></td>
+                    <td style="color:var(--text-muted);">${eq.reporte}</td>
                 `;
-                contenedor.appendChild(item);
+                tbody.appendChild(tr);
+
+                // Llenar select del formulario
+                let opt = document.createElement('option');
+                opt.value = eq.id;
+                opt.innerText = `${eq.id} - ${eq.nombre}`;
+                select.appendChild(opt);
             });
+
+            actualizarContadores();
         }
 
-        function resolverReporte(id) {
-            reportes = reportes.filter(r => r.id !== id);
-            localStorage.setItem('reportes_lab', JSON.stringify(reportes));
-            renderizarReportes();
-            document.getElementById('eqEstado').innerText = "OPERATIVO";
-            document.getElementById('eqEstado').className = "badge bg-operativo";
-        }
+        function procesarReporte(e) {
+            e.preventDefault();
+            const idSeleccionado = document.getElementById('selectEquipo').value;
+            const sintoma = document.getElementById('selectSintoma').value;
+            const detalles = document.getElementById('textDetalles').value;
 
-        function toggleVista() {
-            const vEstudiante = document.getElementById('vistaEstudiante');
-            const vTecnico = document.getElementById('vistaTecnico');
-            const btn = document.getElementById('btnToggle');
-
-            if (vEstudiante.classList.contains('hidden')) {
-                vEstudiante.classList.remove('hidden');
-                vTecnico.classList.add('hidden');
-                btn.innerText = "Modo Técnico";
-            } else {
-                vEstudiante.classList.add('hidden');
-                vTecnico.classList.remove('hidden');
-                btn.innerText = "Modo Estudiante";
-                renderizarReportes();
+            const index = equipos.findIndex(eq => eq.id === idSeleccionado);
+            if(index !== -1) {
+                equipos[index].estado = "En Revisión";
+                equipos[index].reporte = `${sintoma}: ${detalles}`;
+                renderizarTabla();
+                document.getElementById('formExpres').reset();
+                alert("¡Reporte registrado exitosamente en la base de datos!");
             }
         }
+
+        // AUTO-SELECCIÓN POR CÓDIGO QR ESCANEADO DESDE LA URL
+        window.onload = function() {
+            renderizarTabla();
+            const urlParams = new URLSearchParams(window.location.search);
+            const equipoParam = urlParams.get('equipo');
+            if(equipoParam) {
+                const select = document.getElementById('selectEquipo');
+                select.value = equipoParam;
+            }
+        };
     </script>
 </body>
 </html>
