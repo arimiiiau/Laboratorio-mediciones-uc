@@ -3,92 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SGDM - Laboratorios UC</title>
+    <title>SGDM - Lab. Mediciones UC</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --bg-body: #edf2f7;
-            --sidebar-bg: #0f172a;
-            --sidebar-hover: #1e293b;
+            --bg-app: #f4f6f8;
+            --sidebar-bg: #1e293b;
+            --sidebar-text: #94a3b8;
+            --sidebar-hover: #334155;
+            --sidebar-active: #0f766e;
             --card-bg: #ffffff;
-            --text-main: #1e293b;
+            --text-main: #0f172a;
             --text-muted: #64748b;
-            --primary: #0284c7;
-            --primary-dark: #0369a1;
-            --success-bg: #dcfce7; --success-text: #15803d;
-            --warning-bg: #fef3c7; --warning-text: #b45309;
-            --danger-bg: #fee2e2; --danger-text: #b91c1c;
-            --banner-bg: #1e3a8a;
+            --primary: #0f766e;
+            --primary-hover: #115e59;
+            --border-color: #e2e8f0;
+            --success-bg: #ecfdf5; --success-text: #065f46;
+            --warning-bg: #fffbeb; --warning-text: #92400e;
+            --danger-bg: #fef2f2; --danger-text: #991b1b;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
-        body { background-color: var(--bg-body); color: var(--text-main); display: flex; min-height: 100vh; }
+        body { background-color: var(--bg-app); color: var(--text-main); display: flex; min-height: 100vh; }
 
-        /* SIDEBAR */
-        .sidebar { width: 250px; background-color: var(--sidebar-bg); color: #f8fafc; padding: 20px 15px; display: flex; flex-direction: column; flex-shrink: 0; }
-        .sidebar-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 30px; padding: 0 10px; }
-        .sidebar-brand img { width: 38px; height: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+        /* SIDEBAR MODERNO Y SOBRIO */
+        .sidebar { width: 260px; background-color: var(--sidebar-bg); color: #ffffff; padding: 25px 20px; display: flex; flex-direction: column; flex-shrink: 0; border-right: 1px solid rgba(255,255,255,0.05); }
+        .sidebar-brand { display: flex; align-items: center; gap: 14px; margin-bottom: 35px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .sidebar-brand img { width: 42px; height: auto; }
         .sidebar-brand .title { font-weight: 700; font-size: 1.05rem; color: #ffffff; line-height: 1.2; }
         .sidebar-brand .subtitle { font-size: 0.75rem; color: #94a3b8; font-weight: 400; }
         
-        .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-        .sidebar-menu li a { display: flex; align-items: center; gap: 12px; padding: 12px 15px; color: #94a3b8; text-decoration: none; border-radius: 8px; font-weight: 500; font-size: 0.9rem; transition: 0.2s; }
+        .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+        .sidebar-menu li a { display: flex; align-items: center; gap: 14px; padding: 12px 16px; color: var(--sidebar-text); text-decoration: none; border-radius: 8px; font-weight: 500; font-size: 0.92rem; transition: all 0.2s ease; cursor: pointer; }
         .sidebar-menu li.active a, .sidebar-menu li a:hover { background-color: var(--sidebar-hover); color: #ffffff; }
-        .sidebar-footer { margin-top: auto; padding: 10px; font-size: 0.75rem; color: #64748b; border-top: 1px solid #334155; }
+        .sidebar-menu li.active a { background-color: var(--sidebar-active); font-weight: 600; }
+        .sidebar-footer { margin-top: auto; padding-top: 15px; font-size: 0.75rem; color: #64748b; border-top: 1px solid rgba(255,255,255,0.08); }
 
-        /* MAIN CONTENT */
-        .main-content { flex-grow: 1; padding: 25px 30px; overflow-y: auto; }
-        .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .top-header h1 { font-size: 1.4rem; color: var(--text-main); font-weight: 700; }
-        .user-badge { background: #ffffff; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 8px; }
+        /* MAIN CONTENT AREA */
+        .main-content { flex-grow: 1; padding: 30px 40px; overflow-y: auto; max-height: 100vh; }
+        .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .top-header h1 { font-size: 1.5rem; color: var(--text-main); font-weight: 700; }
+        .user-badge { background: #ffffff; padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); border: 1px solid var(--border-color); display: flex; align-items: center; gap: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
 
-        /* BANNER */
-        .banner-stand { background: linear-gradient(135deg, var(--banner-bg), #1d4ed8); color: #ffffff; padding: 16px 20px; border-radius: 12px; margin-bottom: 25px; display: flex; align-items: center; gap: 15px; box-shadow: 0 4px 12px rgba(30,58,138,0.25); }
-        .banner-icon { font-size: 1.8rem; background: rgba(255,255,255,0.15); padding: 10px; border-radius: 10px; }
-        .banner-text h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 2px; }
-        .banner-text p { font-size: 0.83rem; opacity: 0.9; }
+        /* SECTIONS / VIEWS */
+        .view-section { display: none; }
+        .view-section.active { display: block; }
 
-        /* METRICS GRID */
-        .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 25px; }
-        .metric-card { background: var(--card-bg); padding: 18px; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); display: flex; justify-content: space-between; align-items: center; }
+        /* METRICS */
+        .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 25px; }
+        .metric-card { background: var(--card-bg); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; justify-content: space-between; align-items: center; }
         .metric-info .label { font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px; }
-        .metric-info .value { font-size: 1.6rem; font-weight: 800; margin-top: 4px; color: var(--text-main); }
-        .metric-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
-        .icon-blue { background: #e0f2fe; color: #0284c7; }
-        .icon-green { background: #dcfce7; color: #16a34a; }
-        .icon-yellow { background: #fef3c7; color: #d97706; }
-        .icon-red { background: #fee2e2; color: #dc2626; }
+        .metric-info .value { font-size: 1.7rem; font-weight: 800; margin-top: 4px; color: var(--text-main); }
+        .metric-icon { width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
+        .icon-teal { background: #ccfbf1; color: #0f766e; }
+        .icon-green { background: var(--success-bg); color: var(--success-text); }
+        .icon-yellow { background: var(--warning-bg); color: var(--warning-text); }
+        .icon-red { background: var(--danger-bg); color: var(--danger-text); }
 
-        /* CONTENT GRID */
-        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
-        .panel-card { background: var(--card-bg); border-radius: 12px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
-        .panel-title { font-size: 1rem; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; color: var(--text-main); }
+        /* GRID CONTENT */
+        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
+        .panel-card { background: var(--card-bg); border-radius: 12px; padding: 22px; border: 1px solid var(--border-color); box-shadow: 0 2px 4px rgba(0,0,0,0.02); margin-bottom: 25px; }
+        .panel-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; color: var(--text-main); }
 
-        /* TABLE */
+        /* TABLES */
         .table-responsive { width: 100%; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-        th { text-align: left; padding: 12px 10px; color: var(--text-muted); font-size: 0.78rem; text-transform: uppercase; border-bottom: 2px solid #f1f5f9; font-weight: 700; }
-        td { padding: 12px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        th { text-align: left; padding: 12px; color: var(--text-muted); font-size: 0.78rem; text-transform: uppercase; border-bottom: 2px solid var(--border-color); font-weight: 700; background: #fafafa; }
+        td { padding: 14px 12px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
         tr:hover { background-color: #f8fafc; }
 
-        /* BADGES */
-        .status-badge { padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; display: inline-block; }
+        /* STATUS BADGES */
+        .status-badge { padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: inline-block; }
         .status-operativo { background: var(--success-bg); color: var(--success-text); }
         .status-revision { background: var(--warning-bg); color: var(--warning-text); }
         .status-falla { background: var(--danger-bg); color: var(--danger-text); }
 
-        /* FORM */
-        .form-group { margin-bottom: 14px; }
-        .form-group label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-main); margin-bottom: 5px; }
-        .form-control { width: 100%; padding: 10px; font-size: 0.85rem; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc; font-family: inherit; }
-        .form-control:focus { outline: none; border-color: var(--primary); background: #ffffff; }
-        textarea.form-control { resize: none; }
-        .btn-submit { width: 100%; padding: 12px; background: var(--sidebar-bg); color: #ffffff; border: none; border-radius: 8px; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
-        .btn-submit:hover { background: var(--primary-dark); }
+        /* FORMS */
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 0.82rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px; }
+        .form-control { width: 100%; padding: 11px 14px; font-size: 0.9rem; border: 1px solid var(--border-color); border-radius: 8px; background: #fff; font-family: inherit; color: var(--text-main); }
+        .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1); }
+        textarea.form-control { resize: vertical; }
+        .btn-submit { width: 100%; padding: 12px; background: var(--primary); color: #ffffff; border: none; border-radius: 8px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s; }
+        .btn-submit:hover { background: var(--primary-hover); }
 
-        @media (max-width: 1024px) {
+        /* QR VIEWER GRID */
+        .qr-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .qr-item-card { background: #fff; border: 1px solid var(--border-color); border-radius: 10px; padding: 15px; text-align: center; }
+        .qr-item-card img { width: 130px; height: 130px; margin-bottom: 10px; }
+        .qr-item-card h4 { font-size: 0.9rem; margin-bottom: 4px; color: var(--text-main); }
+        .qr-item-card p { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px; }
+
+        @media (max-width: 1100px) {
             .metrics-grid { grid-template-columns: repeat(2, 1fr); }
             .dashboard-grid { grid-template-columns: 1fr; }
+            .qr-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
@@ -97,21 +106,21 @@
     <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="sidebar-brand">
-            <img src="https://upload.wikimedia.org/wikipedia_commons/0/0a/Escudo_de_la_Universidad_de_Carabobo.svg" alt="UC Logo" onerror="this.src='https://via.placeholder.com/40?text=UC'">
+            <img src="https://upload.wikimedia.org/wikipedia_commons/0/0a/Escudo_de_la_Universidad_de_Carabobo.svg" alt="UC Logo" onerror="this.style.display='none'">
             <div>
                 <div class="title">SGDM Lab UC</div>
-                <div class="subtitle">Facultad de Ingeniería</div>
+                <div class="subtitle">Mediciones Eléctricas</div>
             </div>
         </div>
         <ul class="sidebar-menu">
-            <li class="active"><a href="#"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
-            <li><a href="#"><i class="fa-solid fa-boxes-stacked"></i> Inventario de Equipos</a></li>
-            <li><a href="#"><i class="fa-solid fa-qrcode"></i> Generador de QR</a></li>
-            <li><a href="#"><i class="fa-solid fa-screwdriver-wrench"></i> Mantenimiento</a></li>
+            <li id="menu-dashboard" class="active"><a onclick="cambiarVista('dashboard')"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+            <li id="menu-inventario"><a onclick="cambiarVista('inventario')"><i class="fa-solid fa-boxes-stacked"></i> Inventario de Equipos</a></li>
+            <li id="menu-qr"><a onclick="cambiarVista('qr')"><i class="fa-solid fa-qrcode"></i> Generador de QR</a></li>
+            <li id="menu-mantenimiento"><a onclick="cambiarVista('mantenimiento')"><i class="fa-solid fa-screwdriver-wrench"></i> Mantenimiento</a></li>
         </ul>
         <div class="sidebar-footer">
-            Prototipo de Servicio Comunitario v1.0<br>
-            Lab. de Mediciones Eléctricas
+            Servicio Comunitario 2026<br>
+            Facultad de Ingeniería UC
         </div>
     </aside>
 
@@ -119,145 +128,231 @@
     <main class="main-content">
         
         <div class="top-header">
-            <h1>Panel de Control de Laboratorios</h1>
+            <h1 id="tituloVista">Dashboard General</h1>
             <div class="user-badge">
-                <i class="fa-solid fa-user-shield"></i> Admin / Técnico UC
+                <i class="fa-solid fa-user-gear" style="color: var(--primary);"></i> Operador / Técnico UC
             </div>
         </div>
 
-        <!-- BANNER -->
-        <div class="banner-stand">
-            <div class="banner-icon"><i class="fa-solid fa-grip"></i></div>
-            <div class="banner-text">
-                33 Demostración de Stand:
-                <p>Simula el reporte de un fallo escaneando un equipo o completando el formulario exprés en el panel lateral.</p>
+        <!-- ================= VISTA 1: DASHBOARD ================= -->
+        <section id="vista-dashboard" class="view-section active">
+            <!-- METRICS -->
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-info">
+                        <div class="label">Total Instrumentos</div>
+                        <div class="value" id="totalActivos">0</div>
+                    </div>
+                    <div class="metric-icon icon-teal"><i class="fa-solid fa-microchip"></i></div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-info">
+                        <div class="label">Operativos</div>
+                        <div class="value" id="totalOperativos">0</div>
+                    </div>
+                    <div class="metric-icon icon-green"><i class="fa-solid fa-circle-check"></i></div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-info">
+                        <div class="label">En Revisión</div>
+                        <div class="value" id="totalRevision">0</div>
+                    </div>
+                    <div class="metric-icon icon-yellow"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-info">
+                        <div class="label">Fuera de Servicio</div>
+                        <div class="value" id="totalFalla">0</div>
+                    </div>
+                    <div class="metric-icon icon-red"><i class="fa-solid fa-circle-xmark"></i></div>
+                </div>
             </div>
-        </div>
 
-        <!-- METRICS -->
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-info">
-                    <div class="label">Total Activos</div>
-                    <div class="value" id="totalActivos">24</div>
+            <div class="dashboard-grid">
+                <!-- TABLA RESUMEN -->
+                <div class="panel-card">
+                    <div class="panel-title">
+                        <i class="fa-solid fa-list-check" style="color: var(--primary);"></i> Estado Reciente en Laboratorio
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Código QR</th>
+                                    <th>Instrumento</th>
+                                    <th>Ubicación</th>
+                                    <th>Estado</th>
+                                    <th>Reporte</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaDashboard"></tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="metric-icon icon-blue"><i class="fa-solid fa-plug"></i></div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-info">
-                    <div class="label">Operativos</div>
-                    <div class="value" id="totalOperativos">18</div>
-                </div>
-                <div class="metric-icon icon-green"><i class="fa-solid fa-circle-check"></i></div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-info">
-                    <div class="label">En Revisión</div>
-                    <div class="value" id="totalRevision">4</div>
-                </div>
-                <div class="metric-icon icon-yellow"><i class="fa-solid fa-triangle-exclamation"></i></div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-info">
-                    <div class="label">Fuera de Servicio</div>
-                    <div class="value" id="totalFalla">2</div>
-                </div>
-                <div class="metric-icon icon-red"><i class="fa-solid fa-circle-xmark"></i></div>
-            </div>
-        </div>
 
-        <!-- GRID PRINCIPAL -->
-        <div class="dashboard-grid">
-            
-            <!-- TABLA -->
+                <!-- REPORTE EXPRÉS -->
+                <div class="panel-card">
+                    <div class="panel-title">
+                        <i class="fa-solid fa-bolt" style="color: var(--primary);"></i> Reporte Exprés por QR
+                    </div>
+                    <form id="formExpres" onsubmit="procesarReporte(event)">
+                        <div class="form-group">
+                            <label>Seleccionar Instrumento</label>
+                            <select class="form-control" id="selectEquipo" required>
+                                <option value="">-- Seleccionar Equipo --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Síntoma Detectado</label>
+                            <select class="form-control" id="selectSintoma" required>
+                                <option value="Error / Descalibrado en Medición">Error / Descalibrado en Medición</option>
+                                <option value="No enciende / Sin alimentación">No enciende / Sin alimentación</option>
+                                <option value="Canal / Entrada defectuosa">Canal / Entrada defectuosa</option>
+                                <option value="Display / Aguja dañada">Display / Aguja dañada</option>
+                                <option value="Bornes / Cables rotos">Bornes / Cables rotos</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Detalles Adicionales</label>
+                            <textarea class="form-control" id="textDetalles" rows="3" placeholder="Describa brevemente la anomalía..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit">
+                            <i class="fa-solid fa-paper-plane"></i> Enviar Reporte Técnico
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= VISTA 2: INVENTARIO DE EQUIPOS ================= -->
+        <section id="vista-inventario" class="view-section">
             <div class="panel-card">
                 <div class="panel-title">
-                    <i class="fa-solid fa-list-check"></i> Estado de Equipos en Laboratorio
+                    <i class="fa-solid fa-boxes-stacked" style="color: var(--primary);"></i> Inventario Completo - Lab. Mediciones Eléctricas (UC)
                 </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 15px;">Listado oficial de instrumentos según el programa de prácticas de la Escuela de Ingeniería Eléctrica.</p>
                 <div class="table-responsive">
                     <table>
                         <thead>
                             <tr>
-                                <th>Cód. QR</th>
-                                <th>Equipo</th>
+                                <th>Código QR</th>
+                                <th>Nombre del Instrumento</th>
+                                <th>Tipo</th>
+                                <th>Modelo / Especificación</th>
                                 <th>Ubicación</th>
                                 <th>Estado</th>
-                                <th>Último Reporte</th>
                             </tr>
                         </thead>
-                        <tbody id="tablaCuerpo">
-                            <!-- Filas generadas dinámicamente -->
-                        </tbody>
+                        <tbody id="tablaInventarioCompleto"></tbody>
                     </table>
                 </div>
             </div>
+        </section>
 
-            <!-- FORMULARIO EXPRÉS -->
+        <!-- ================= VISTA 3: GENERADOR DE QR ================= -->
+        <section id="vista-qr" class="view-section">
             <div class="panel-card">
                 <div class="panel-title">
-                    <i class="fa-solid fa-bolt"></i> Reporte Exprés por QR
+                    <i class="fa-solid fa-qrcode" style="color: var(--primary);"></i> Generador de Códigos QR para Equipos
                 </div>
-                <form id="formExpres" onsubmit="procesarReporte(event)">
-                    <div class="form-group">
-                        <label>Seleccionar Equipo</label>
-                        <select class="form-control" id="selectEquipo" required>
-                            <option value="">-- Seleccionar ID o Escanear --</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Síntoma Detectado</label>
-                        <select class="form-control" id="selectSintoma" required>
-                            <option value="No enciende / Sin alimentación">No enciende / Sin alimentación</option>
-                            <option value="Canal / Entrada defectuosa">Canal / Entrada defectuosa</option>
-                            <option value="Descalibrado / Error de lectura">Descalibrado / Error de lectura</option>
-                            <option value="Display / Pantalla dañada">Display / Pantalla dañada</option>
-                            <option value="Bornes / Puntas rotas">Bornes / Puntas rotas</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Detalles Adicionales</label>
-                        <textarea class="form-control" id="textDetalles" rows="3" placeholder="Ej: El canal A presenta ruido excesivo al medir 5V..." required></textarea>
-                    </div>
-
-                    <button type="submit" class="btn-submit">
-                        <i class="fa-solid fa-paper-plane"></i> Enviar Reporte
-                    </button>
-                </form>
+                <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px;">Códigos QR interactivos vinculados directamente al sistema de diagnóstico de la facultad:</p>
+                <div class="qr-grid" id="contenedorQR">
+                    <!-- Generados dinámicamente -->
+                </div>
             </div>
+        </section>
 
-        </div>
+        <!-- ================= VISTA 4: MANTENIMIENTO ================= -->
+        <section id="vista-mantenimiento" class="view-section">
+            <div class="panel-card">
+                <div class="panel-title">
+                    <i class="fa-solid fa-screwdriver-wrench" style="color: var(--primary);"></i> Gestión de Mantenimiento y Calibración
+                </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 15px;">Instrumentos que requieren revisión o reparación por parte del personal técnico:</p>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Instrumento</th>
+                                <th>Fecha Reporte</th>
+                                <th>Problema Reportado</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaMantenimiento"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
 
     </main>
 
     <script>
-        // DATOS INICIALES BASADOS EN EL INVENTARIO REAL DEL LAB DE MEDICIONES
-        let equipos = [
-            { id: "QR-OSC-01", nombre: "Osciloscopio Tektronix 100MHz", ubicacion: "Lab Mediciones A", estado: "Operativo", reporte: "Sin fallas" },
-            { id: "QR-FNT-03", nombre: "Fuente DC Regulada 30V/5A", ubicacion: "Lab Mediciones B", estado: "En Revisión", reporte: "Canal 2 no regula voltaje" },
-            { id: "QR-PC-12", nombre: "PC Dell OptiPlex (Lab Soft)", ubicacion: "Lab Computación 1", estado: "Fuera de Servicio", reporte: "Pantalla azul recurrente" },
-            { id: "QR-MUL-08", nombre: "Multímetro Digital Fluke", ubicacion: "Lab Mediciones A", estado: "Operativo", reporte: "Sin fallas" },
-            { id: "QR-TEL-01", nombre: "Telurómetro Megger DET4", ubicacion: "Estante Especiales", estado: "Operativo", reporte: "Sin fallas" },
-            { id: "QR-GAL-02", nombre: "Galvanómetro D'Arsonval", ubicacion: "Estante A", estado: "En Revisión", reporte: "Falta ajuste de cero" }
+        // BASE DE DATOS COMPLETA: Osciloscopios, Voltímetros, Amperímetros, Galvanómetros, Telurómetros, etc.
+        let inventarioUC = JSON.parse(localStorage.getItem('inventario_uc_db')) || [
+            { id: "UC-OSC-DIG01", nombre: "Osciloscopio Digital 2 Canales", tipo: "Osciloscopio Digital", modelo: "Tektronix TBS1052B", ubicacion: "Mesa #1", estado: "Operativo", reporte: "Sin fallas" },
+            { id: "UC-OSC-DIG02", nombre: "Osciloscopio Digital 2 Canales", tipo: "Osciloscopio Digital", modelo: "Tektronix TBS1052B", ubicacion: "Mesa #2", estado: "Operativo", reporte: "Sin fallas" },
+            { id: "UC-OSC-ANA01", nombre: "Osciloscopio Analógico de Rayos Catódicos", tipo: "Osciloscopio Analógico", modelo: "GW Instek GOS-620", ubicacion: "Mesa #3", estado: "Operativo", reporte: "Sin fallas" },
+            { id: "UC-OSC-ANA02", nombre: "Osciloscopio Analógico de Rayos Catódicos", tipo: "Osciloscopio Analógico", modelo: "GW Instek GOS-620", ubicacion: "Mesa #4", estado: "En Revisión", reporte: "Canal 2 sin deflexión" },
+            { id: "UC-VOLT-ANA01", nombre: "Voltímetro Analógico Bobina Móvil", tipo: "Voltímetro Analógico", modelo: "Simpson 260 AC/DC", ubicacion: "Estante A", estado: "Operativo", reporte: "Sin fallas" },
+            { id: "UC-VOLT-DIG01", nombre: "Voltímetro Digital de Banco", tipo: "Voltímetro Digital", modelo: "Fluke 8808A", ubicacion: "Mesa #1", estado: "Operativo", reporte: "Sin fallas" },
+            { id: "UC-AMP-ANA01", nombre: "Amperímetro Analógico C.A./C.C.", tipo: "Amperímetro Analógico", modelo: "Yokogawa 2011", ubicacion: "Estante A", estado: "Operativo", reporte: "Sin fallas" },
+            { id: "UC-MICRO-AMP01", nombre: "Microamperímetro de Precisión C.C.", tipo: "Microamperímetro", modelo: "Simpson 29 (0-100 uA)", ubicacion: "Armario Lab", estado: "Fuera de Servicio", reporte: "Aguja doblada / pegada" },
+            { id: "UC-GALV-01", nombre: "Galvanómetro D'Arsonval C.C.", tipo: "Galvanómetro", modelo: "Phywe Zero-Center", ubicacion: "Armario Lab", estado: "Operativo", reporte: "Sin fallas" },
+            { id: "UC-PUENTE-WHEAT01", nombre: "Puente de Wheatstone Portátil", tipo: "Puente de Medición", modelo: "Yokogawa 2755", ubicacion: "Estante B", estado: "Operativo", reporte: "Sin fallas" },
+            { id: "UC-TELURO-01", nombre: "Telurómetro / Medidor Puesta a Tierra", tipo: "Telurómetro", modelo: "Megger DET4TD2", ubicacion: "Estante Especiales", estado: "Operativo", reporte: "Sin fallas" },
+            { id: "UC-MEGOHM-01", nombre: "Megóhmetro / Medidor Aislamiento", tipo: "Megóhmetro", modelo: "Fluke 1507 (1000V)", ubicacion: "Estante B", estado: "Operativo", reporte: "Sin fallas" },
+            { id: "UC-GEN-SIG01", nombre: "Generador de Funciones / Señales", tipo: "Generador", modelo: "GW Instek GFG-8216A", ubicacion: "Mesa #1", estado: "Operativo", reporte: "Sin fallas" },
+            { id: "UC-FNT-DC01", nombre: "Fuente de Poder C.C. Regulada Doble", tipo: "Fuente DC", modelo: "Agilent E3631A", ubicacion: "Mesa #1", estado: "Operativo", reporte: "Sin fallas" },
+            { id: "UC-VAR-AC01", nombre: "Variac / Autotransformador Variable C.A.", tipo: "Fuente AC Variable", modelo: "Staco Energy 3PN1010", ubicacion: "Mesa #2", estado: "En Revisión", reporte: "Escobilla desgastada" },
+            { id: "UC-TRANSF-PRUEBA01", nombre: "Transformador Monofásico de Ensayo", tipo: "Transformador", modelo: "Didáctico UC 120V/24V", ubicacion: "Mesa #5", estado: "Operativo", reporte: "Sin fallas" },
+            { id: "UC-VATIO-01", nombre: "Vatímetro Monofásico Electrodinámico", tipo: "Medidor Potencia", modelo: "Yokogawa 2041", ubicacion: "Estante C", estado: "Operativo", reporte: "Sin fallas" },
+            { id: "UC-COSF-01", nombre: "Cofímetro / Factor de Potencia", tipo: "Medidor FP", modelo: "Yokogawa 2039", ubicacion: "Estante C", estado: "Operativo", reporte: "Sin fallas" },
+            { id: "UC-DEC-RES01", nombre: "Caja de Décadas de Resistencia", tipo: "Componente Pasivo", modelo: "IET Labs RS-200", ubicacion: "Estante B", estado: "Operativo", reporte: "Sin fallas" },
+            { id: "UC-DEC-CAP01", nombre: "Caja de Décadas de Capacitancia", tipo: "Componente Pasivo", modelo: "IET Labs CS-300", ubicacion: "Estante B", estado: "Operativo", reporte: "Sin fallas" }
         ];
 
-        function actualizarContadores() {
-            document.getElementById('totalActivos').innerText = equipos.length;
-            document.getElementById('totalOperativos').innerText = equipos.filter(e => e.estado === 'Operativo').length;
-            document.getElementById('totalRevision').innerText = equipos.filter(e => e.estado === 'En Revisión').length;
-            document.getElementById('totalFalla').innerText = equipos.filter(e => e.estado === 'Fuera de Servicio').length;
+        // CAMBIAR DE VISTA (PESTAÑAS)
+        function cambiarVista(nombreVista) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.sidebar-menu li').forEach(el => el.classList.remove('active'));
+
+            document.getElementById(`vista-${nombreVista}`).classList.add('active');
+            document.getElementById(`menu-${nombreVista}`).classList.add('active');
+
+            const titulos = {
+                'dashboard': 'Dashboard General',
+                'inventario': 'Inventario de Equipos e Instrumentos',
+                'qr': 'Generador de Códigos QR',
+                'mantenimiento': 'Gestión de Mantenimiento'
+            };
+            document.getElementById('tituloVista').innerText = titulos[nombreVista];
+
+            if(nombreVista === 'qr') renderizarQR();
+            if(nombreVista === 'mantenimiento') renderizarMantenimiento();
+            if(nombreVista === 'inventario') renderizarInventarioCompleto();
         }
 
-        function renderizarTabla() {
-            const tbody = document.getElementById('tablaCuerpo');
-            const select = document.getElementById('selectEquipo');
-            
-            tbody.innerHTML = '';
-            select.innerHTML = '<option value="">-- Seleccionar ID o Escanear --</option>';
+        // ACTUALIZAR MÉTRICAS Y TABLAS
+        function actualizarSistema() {
+            localStorage.setItem('inventario_uc_db', JSON.stringify(inventarioUC));
 
-            equipos.forEach(eq => {
-                // Llenar tabla
+            document.getElementById('totalActivos').innerText = inventarioUC.length;
+            document.getElementById('totalOperativos').innerText = inventarioUC.filter(e => e.estado === 'Operativo').length;
+            document.getElementById('totalRevision').innerText = inventarioUC.filter(e => e.estado === 'En Revisión').length;
+            document.getElementById('totalFalla').innerText = inventarioUC.filter(e => e.estado === 'Fuera de Servicio').length;
+
+            renderizarDashboard();
+        }
+
+        function renderizarDashboard() {
+            const tbody = document.getElementById('tablaDashboard');
+            const select = document.getElementById('selectEquipo');
+            tbody.innerHTML = '';
+            select.innerHTML = '<option value="">-- Seleccionar Instrumento --</option>';
+
+            inventarioUC.forEach(eq => {
                 let badgeClass = "status-operativo";
                 if(eq.estado === "En Revisión") badgeClass = "status-revision";
                 if(eq.estado === "Fuera de Servicio") badgeClass = "status-falla";
@@ -268,44 +363,115 @@
                     <td>${eq.nombre}</td>
                     <td>${eq.ubicacion}</td>
                     <td><span class="status-badge ${badgeClass}">${eq.estado}</span></td>
-                    <td style="color:var(--text-muted);">${eq.reporte}</td>
+                    <td style="color:var(--text-muted); font-size:0.85rem;">${eq.reporte}</td>
                 `;
                 tbody.appendChild(tr);
 
-                // Llenar select del formulario
                 let opt = document.createElement('option');
                 opt.value = eq.id;
                 opt.innerText = `${eq.id} - ${eq.nombre}`;
                 select.appendChild(opt);
             });
+        }
 
-            actualizarContadores();
+        function renderizarInventarioCompleto() {
+            const tbody = document.getElementById('tablaInventarioCompleto');
+            tbody.innerHTML = '';
+            inventarioUC.forEach(eq => {
+                let badgeClass = "status-operativo";
+                if(eq.estado === "En Revisión") badgeClass = "status-revision";
+                if(eq.estado === "Fuera de Servicio") badgeClass = "status-falla";
+
+                let tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${eq.id}</strong></td>
+                    <td>${eq.nombre}</td>
+                    <td>${eq.tipo}</td>
+                    <td>${eq.modelo}</td>
+                    <td>${eq.ubicacion}</td>
+                    <td><span class="status-badge ${badgeClass}">${eq.estado}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderizarQR() {
+            const contenedor = document.getElementById('contenedorQR');
+            contenedor.innerHTML = '';
+            inventarioUC.forEach(eq => {
+                let urlPagina = window.location.href.split('?')[0] + `?equipo=${eq.id}`;
+                let qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodeURIComponent(urlPagina)}`;
+
+                let card = document.createElement('div');
+                card.className = 'qr-item-card';
+                card.innerHTML = `
+                    <img src="${qrApi}" alt="QR ${eq.id}">
+                    <h4>${eq.id}</h4>
+                    <p>${eq.nombre}</p>
+                    <a href="${qrApi}" target="_blank" style="font-size:0.75rem; color:var(--primary); text-decoration:none; font-weight:700;">📥 Descargar QR</a>
+                `;
+                contenedor.appendChild(card);
+            });
+        }
+
+        function renderizarMantenimiento() {
+            const tbody = document.getElementById('tablaMantenimiento');
+            tbody.innerHTML = '';
+            let revisiones = inventarioUC.filter(e => e.estado !== 'Operativo');
+
+            if(revisiones.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No hay instrumentos en mantenimiento. ¡Todo operativo!</td></tr>`;
+                return;
+            }
+
+            revisiones.forEach(eq => {
+                let tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${eq.id}</strong></td>
+                    <td>${eq.nombre}</td>
+                    <td>Reciente</td>
+                    <td style="color:var(--danger-text);">${eq.reporte}</td>
+                    <td><button onclick="marcarOperativo('${eq.id}')" style="padding:6px 12px; background:var(--primary); color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:0.8rem; font-weight:600;">✅ Resolver / Calibrar</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
         }
 
         function procesarReporte(e) {
             e.preventDefault();
-            const idSeleccionado = document.getElementById('selectEquipo').value;
+            const idSel = document.getElementById('selectEquipo').value;
             const sintoma = document.getElementById('selectSintoma').value;
             const detalles = document.getElementById('textDetalles').value;
 
-            const index = equipos.findIndex(eq => eq.id === idSeleccionado);
-            if(index !== -1) {
-                equipos[index].estado = "En Revisión";
-                equipos[index].reporte = `${sintoma}: ${detalles}`;
-                renderizarTabla();
+            let eq = inventarioUC.find(item => item.id === idSel);
+            if(eq) {
+                eq.estado = "En Revisión";
+                eq.reporte = `${sintoma}: ${detalles}`;
+                actualizarSistema();
                 document.getElementById('formExpres').reset();
-                alert("¡Reporte registrado exitosamente en la base de datos!");
+                alert("¡Reporte registrado exitosamente! El equipo ha pasado a la sección de mantenimiento.");
+                cambiarVista('mantenimiento');
             }
         }
 
-        // AUTO-SELECCIÓN POR CÓDIGO QR ESCANEADO DESDE LA URL
+        function marcarOperativo(id) {
+            let eq = inventarioUC.find(item => item.id === id);
+            if(eq) {
+                eq.estado = "Operativo";
+                eq.reporte = "Sin fallas";
+                actualizarSistema();
+                renderizarMantenimiento();
+                alert(`¡El instrumento ${id} ha sido marcado como Operativo/Calibrado!`);
+            }
+        }
+
+        // CARGAR AL INICIO
         window.onload = function() {
-            renderizarTabla();
+            actualizarSistema();
             const urlParams = new URLSearchParams(window.location.search);
             const equipoParam = urlParams.get('equipo');
             if(equipoParam) {
-                const select = document.getElementById('selectEquipo');
-                select.value = equipoParam;
+                document.getElementById('selectEquipo').value = equipoParam;
             }
         };
     </script>
