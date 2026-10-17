@@ -24,9 +24,31 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
-        body { background-color: var(--bg-app); color: var(--text-main); display: flex; min-height: 100vh; }
+        body { background-color: var(--bg-app); color: var(--text-main); display: flex; min-height: 100vh; position: relative; }
 
-        /* SIDEBAR MODERNO Y SOBRIO */
+        /* NOTIFICACIÓN FLOTANTE (TOAST) */
+        .toast-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ffffff;
+            border-left: 5px solid var(--primary);
+            padding: 16px 20px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 9999;
+            transform: translateX(150%);
+            transition: transform 0.4s ease-in-out;
+        }
+        .toast-notification.show { transform: translateX(0); }
+        .toast-notification i { font-size: 1.4rem; color: var(--primary); }
+        .toast-notification .toast-title { font-weight: 700; font-size: 0.9rem; color: var(--text-main); }
+        .toast-notification .toast-sub { font-size: 0.78rem; color: var(--text-muted); }
+
+        /* SIDEBAR */
         .sidebar { width: 260px; background-color: var(--sidebar-bg); color: #ffffff; padding: 25px 20px; display: flex; flex-direction: column; flex-shrink: 0; border-right: 1px solid rgba(255,255,255,0.05); }
         .sidebar-brand { display: flex; align-items: center; gap: 14px; margin-bottom: 35px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .sidebar-brand img { width: 42px; height: auto; }
@@ -37,7 +59,19 @@
         .sidebar-menu li a { display: flex; align-items: center; gap: 14px; padding: 12px 16px; color: var(--sidebar-text); text-decoration: none; border-radius: 8px; font-weight: 500; font-size: 0.92rem; transition: all 0.2s ease; cursor: pointer; }
         .sidebar-menu li.active a, .sidebar-menu li a:hover { background-color: var(--sidebar-hover); color: #ffffff; }
         .sidebar-menu li.active a { background-color: var(--sidebar-active); font-weight: 600; }
-        .sidebar-footer { margin-top: auto; padding-top: 15px; font-size: 0.75rem; color: #64748b; border-top: 1px solid rgba(255,255,255,0.08); }
+        
+        /* CRÉDITOS EN SIDEBAR */
+        .sidebar-credits {
+            margin-top: auto;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+        .sidebar-credits strong { color: #f8fafc; font-size: 0.8rem; display: block; margin-bottom: 6px; }
+        .sidebar-credits ul { list-style: none; padding-left: 0; margin-top: 4px; }
+        .sidebar-credits li { margin-bottom: 3px; display: flex; align-items: center; gap: 6px; color: #cbd5e1; }
+        .sidebar-credits li i { font-size: 0.65rem; color: var(--primary); }
 
         /* MAIN CONTENT AREA */
         .main-content { flex-grow: 1; padding: 30px 40px; overflow-y: auto; max-height: 100vh; }
@@ -94,14 +128,34 @@
         .qr-item-card h4 { font-size: 0.9rem; margin-bottom: 4px; color: var(--text-main); }
         .qr-item-card p { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px; }
 
+        /* GUÍAS DE FUNCIONAMIENTO */
+        .guide-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .guide-card { background: #fff; border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .guide-header { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 14px; }
+        .guide-header i { font-size: 1.5rem; color: var(--primary); background: #ccfbf1; padding: 10px; border-radius: 10px; }
+        .guide-header h3 { font-size: 1.05rem; font-weight: 700; color: var(--text-main); }
+        .guide-body h4 { font-size: 0.85rem; font-weight: 700; color: var(--primary); margin: 12px 0 4px 0; text-transform: uppercase; }
+        .guide-body p, .guide-body ul { font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; }
+        .guide-body ul { padding-left: 20px; }
+        .guide-body li { margin-bottom: 4px; }
+
         @media (max-width: 1100px) {
             .metrics-grid { grid-template-columns: repeat(2, 1fr); }
             .dashboard-grid { grid-template-columns: 1fr; }
-            .qr-grid { grid-template-columns: repeat(2, 1fr); }
+            .qr-grid, .guide-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
+
+    <!-- NOTIFICACIÓN DE ÉXITO -->
+    <div id="toast" class="toast-notification">
+        <i class="fa-solid fa-circle-check"></i>
+        <div>
+            <div class="toast-title">Reporte Registrado con Éxito</div>
+            <div class="toast-sub" id="toastSubText">El equipo ha pasado al estado 'En Revisión'.</div>
+        </div>
+    </div>
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
@@ -115,12 +169,23 @@
         <ul class="sidebar-menu">
             <li id="menu-dashboard" class="active"><a onclick="cambiarVista('dashboard')"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
             <li id="menu-inventario"><a onclick="cambiarVista('inventario')"><i class="fa-solid fa-boxes-stacked"></i> Inventario de Equipos</a></li>
+            <li id="menu-guias"><a onclick="cambiarVista('guias')"><i class="fa-solid fa-graduation-cap"></i> Guía de Uso</a></li>
             <li id="menu-qr"><a onclick="cambiarVista('qr')"><i class="fa-solid fa-qrcode"></i> Generador de QR</a></li>
             <li id="menu-mantenimiento"><a onclick="cambiarVista('mantenimiento')"><i class="fa-solid fa-screwdriver-wrench"></i> Mantenimiento</a></li>
         </ul>
-        <div class="sidebar-footer">
-            Servicio Comunitario 2026<br>
-            Facultad de Ingeniería UC
+        
+        <!-- SECCIÓN DE CRÉDITOS Y COLABORADORES -->
+        <div class="sidebar-credits">
+            <strong><i class="fa-solid fa-users-gear"></i> Colaboradores del Proyecto:</strong>
+            <ul>
+                <li><i class="fa-solid fa-user-check"></i> Arianna Fereira</li>
+                <li><i class="fa-solid fa-user-check"></i> Alirio Piñero</li>
+                <li><i class="fa-solid fa-user-check"></i> Javier López</li>
+                <li><i class="fa-solid fa-user-check"></i> Daniel Castillo</li>
+            </ul>
+            <div style="margin-top: 8px; font-size: 0.7rem; color: #64748b;">
+                Servicio Comunitario UC 2026
+            </div>
         </div>
     </aside>
 
@@ -249,20 +314,121 @@
             </div>
         </section>
 
-        <!-- ================= VISTA 3: GENERADOR DE QR ================= -->
+        <!-- ================= VISTA 3: GUÍAS DE FUNCIONAMIENTO Y USO ================= -->
+        <section id="vista-guias" class="view-section">
+            <div class="panel-card">
+                <div class="panel-title">
+                    <i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> Guías Prácticas y Funcionamiento de Dispositivos
+                </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px;">Instrucciones paso a paso, principios de medición y precauciones para las prácticas de laboratorio:</p>
+                
+                <div class="guide-grid">
+                    <!-- OSCILOSCOPIO DIGITAL -->
+                    <div class="guide-card">
+                        <div class="guide-header">
+                            <i class="fa-solid fa-wave-square"></i>
+                            <div>
+                                <h3>Osciloscopio Digital</h3>
+                                <p style="font-size:0.78rem; color:var(--text-muted);">Tektronix TBS1052B (Prácticas 2, 4 y 5)</p>
+                            </div>
+                        </div>
+                        <div class="guide-body">
+                            <h4>Principio de Operación</h4>
+                            <p>Muestra gráficamente señales eléctricas representando la tensión (eje Y) frente al tiempo (eje X) mediante muestreo digital de alta velocidad.</p>
+                            <h4>Procedimiento de Medición</h4>
+                            <ul>
+                                <li>Conectar la punta de prueba al canal CH1 o CH2.</li>
+                                <li>Ajustar la escala vertical (Volts/Div) y horizontal (Sec/Div).</li>
+                                <li>Presionar <strong>Autoset</strong> para capturar rápidamente la forma de onda.</li>
+                                <li>Utilizar los botones <strong>Measure</strong> para leer Vpp, Vrms y Frecuencia.</li>
+                            </ul>
+                            <h4>Precaución Importante</h4>
+                            <p style="color:var(--danger-text); font-weight:600;">Nunca conectar el caimán de tierra a un punto del circuito que no sea el nodo de referencia común (GND).</p>
+                        </div>
+                    </div>
+
+                    <!-- GALVANÓMETRO D'ARSONVAL Y ANALÓGICOS -->
+                    <div class="guide-card">
+                        <div class="guide-header">
+                            <i class="fa-solid fa-gauge-high"></i>
+                            <div>
+                                <h3>Galvanómetro D'Arsonval / Analógicos</h3>
+                                <p style="font-size:0.78rem; color:var(--text-muted);">Simpson / Yokogawa (Prácticas 3 y 7)</p>
+                            </div>
+                        </div>
+                        <div class="guide-body">
+                            <h4>Principio de Operación</h4>
+                            <p>Basado en la interacción del campo magnético de un imán permanente con el campo magnético generado por la corriente en una bobina móvil, provocando la deflexión de la aguja.</p>
+                            <h4>Procedimiento de Medición</h4>
+                            <ul>
+                                <li>Ajustar el tornillo frontal para calibrar el <strong>cero mecánico</strong> de la aguja.</li>
+                                <li>Seleccionar siempre la escala mayor antes de medir y reducir progresivamente.</li>
+                                <li>Observar la aguja de manera perpendicular para evitar el <strong>error de paralaje</strong>.</li>
+                            </ul>
+                            <h4>Precaución Importante</h4>
+                            <p style="color:var(--danger-text); font-weight:600;">Respetar strictly la polaridad (+ y -). Una polaridad invertida puede doblar o romper la aguja.</p>
+                        </div>
+                    </div>
+
+                    <!-- PUENTE DE WHEATSTONE -->
+                    <div class="guide-card">
+                        <div class="guide-header">
+                            <i class="fa-solid fa-network-wired"></i>
+                            <div>
+                                <h3>Puente de Wheatstone</h3>
+                                <p style="font-size:0.78rem; color:var(--text-muted);">Yokogawa 2755 (Práctica 7: Medida de Resistencias)</p>
+                            </div>
+                        </div>
+                        <div class="guide-body">
+                            <h4>Principio de Operación</h4>
+                            <p>Permite medir resistencias desconocidas mediante el equilibrio de dos ramas en puente. Cuando la diferencia de potencial entre los puntos centrales es cero, la corriente no fluye por el galvanómetro interno.</p>
+                            <h4>Procedimiento de Medición</h4>
+                            <ul>
+                                <li>Conectar la resistencia incógnita en los bornes Rx.</li>
+                                <li>Ajustar el multiplicador de escala al rango estimado.</li>
+                                <li>Presionar intermitentemente el botón de batería y galvanómetro ajustando los diales hasta que la aguja no se mueva de cero.</li>
+                                <li>Multiplicar el valor de los diales por el factor de escala elegido.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- TELURÓMETRO -->
+                    <div class="guide-card">
+                        <div class="guide-header">
+                            <i class="fa-solid fa-earth-americas"></i>
+                            <div>
+                                <h3>Telurómetro (Medidor de Tierra)</h3>
+                                <p style="font-size:0.78rem; color:var(--text-muted);">Megger DET4TD2 (Prácticas Especiales)</p>
+                            </div>
+                        </div>
+                        <div class="guide-body">
+                            <h4>Principio de Operación</h4>
+                            <p>Inyecta una corriente alterna auxiliar a través del terreno utilizando picas o estacas alineadas para medir la resistencia del sistema de puesta a tierra mediante el método de caída de potencial.</p>
+                            <h4>Procedimiento de Medición</h4>
+                            <ul>
+                                <li>Clavar la estaca C (corriente) a la mayor distancia posible y la estaca P (potencial) en el punto medio (62%).</li>
+                                <li>Conectar los cables verde (tierra), amarillo (P) y rojo (C) a la unidad.</li>
+                                <li>Girar el selector a la función de 3 polos y pulsar <strong>TEST</strong> para obtener la lectura en ohmios (Ω).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= VISTA 4: GENERADOR DE QR ================= -->
         <section id="vista-qr" class="view-section">
             <div class="panel-card">
                 <div class="panel-title">
                     <i class="fa-solid fa-qrcode" style="color: var(--primary);"></i> Generador de Códigos QR para Equipos
                 </div>
                 <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px;">Códigos QR interactivos vinculados directamente al sistema de diagnóstico de la facultad:</p>
-                <div class="qr-grid" id="contenedorQR">
-                    <!-- Generados dinámicamente -->
-                </div>
+                <div class="qr-grid" id="contenedorQR"></div>
             </div>
         </section>
 
-        <!-- ================= VISTA 4: MANTENIMIENTO ================= -->
+        <!-- ================= VISTA 5: MANTENIMIENTO ================= -->
         <section id="vista-mantenimiento" class="view-section">
             <div class="panel-card">
                 <div class="panel-title">
@@ -289,7 +455,6 @@
     </main>
 
     <script>
-        // BASE DE DATOS COMPLETA: Osciloscopios, Voltímetros, Amperímetros, Galvanómetros, Telurómetros, etc.
         let inventarioUC = JSON.parse(localStorage.getItem('inventario_uc_db')) || [
             { id: "UC-OSC-DIG01", nombre: "Osciloscopio Digital 2 Canales", tipo: "Osciloscopio Digital", modelo: "Tektronix TBS1052B", ubicacion: "Mesa #1", estado: "Operativo", reporte: "Sin fallas" },
             { id: "UC-OSC-DIG02", nombre: "Osciloscopio Digital 2 Canales", tipo: "Osciloscopio Digital", modelo: "Tektronix TBS1052B", ubicacion: "Mesa #2", estado: "Operativo", reporte: "Sin fallas" },
@@ -313,7 +478,6 @@
             { id: "UC-DEC-CAP01", nombre: "Caja de Décadas de Capacitancia", tipo: "Componente Pasivo", modelo: "IET Labs CS-300", ubicacion: "Estante B", estado: "Operativo", reporte: "Sin fallas" }
         ];
 
-        // CAMBIAR DE VISTA (PESTAÑAS)
         function cambiarVista(nombreVista) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.sidebar-menu li').forEach(el => el.classList.remove('active'));
@@ -324,6 +488,7 @@
             const titulos = {
                 'dashboard': 'Dashboard General',
                 'inventario': 'Inventario de Equipos e Instrumentos',
+                'guias': 'Guías de Funcionamiento y Uso Práctico',
                 'qr': 'Generador de Códigos QR',
                 'mantenimiento': 'Gestión de Mantenimiento'
             };
@@ -334,7 +499,6 @@
             if(nombreVista === 'inventario') renderizarInventarioCompleto();
         }
 
-        // ACTUALIZAR MÉTRICAS Y TABLAS
         function actualizarSistema() {
             localStorage.setItem('inventario_uc_db', JSON.stringify(inventarioUC));
 
@@ -430,11 +594,20 @@
                     <td><strong>${eq.id}</strong></td>
                     <td>${eq.nombre}</td>
                     <td>Reciente</td>
-                    <td style="color:var(--danger-text);">${eq.reporte}</td>
+                    <td style="color:var(--danger-text); font-weight:600;">${eq.reporte}</td>
                     <td><button onclick="marcarOperativo('${eq.id}')" style="padding:6px 12px; background:var(--primary); color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:0.8rem; font-weight:600;">✅ Resolver / Calibrar</button></td>
                 `;
                 tbody.appendChild(tr);
             });
+        }
+
+        function mostrarNotificacion(texto) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastSubText').innerText = texto;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4000);
         }
 
         function procesarReporte(e) {
@@ -449,8 +622,7 @@
                 eq.reporte = `${sintoma}: ${detalles}`;
                 actualizarSistema();
                 document.getElementById('formExpres').reset();
-                alert("¡Reporte registrado exitosamente! El equipo ha pasado a la sección de mantenimiento.");
-                cambiarVista('mantenimiento');
+                mostrarNotificacion(`El equipo ${idSel} ha pasado a Mantenimiento.`);
             }
         }
 
@@ -461,11 +633,10 @@
                 eq.reporte = "Sin fallas";
                 actualizarSistema();
                 renderizarMantenimiento();
-                alert(`¡El instrumento ${id} ha sido marcado como Operativo/Calibrado!`);
+                mostrarNotificacion(`El equipo ${id} fue marcado como Operativo.`);
             }
         }
 
-        // CARGAR AL INICIO
         window.onload = function() {
             actualizarSistema();
             const urlParams = new URLSearchParams(window.location.search);
