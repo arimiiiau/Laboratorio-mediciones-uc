@@ -48,25 +48,42 @@
         .toast-notification .toast-title { font-weight: 700; font-size: 0.9rem; color: var(--text-main); }
         .toast-notification .toast-sub { font-size: 0.78rem; color: var(--text-muted); }
 
+        /* MODAL DE SCANNER / FICHA DEL EQUIPO ESCANEADO */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
+            display: none; justify-content: center; align-items: center; z-index: 10000;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-card {
+            background: #fff; width: 90%; max-width: 550px; border-radius: 16px;
+            padding: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); position: relative;
+            animation: modalIn 0.3s ease-out;
+        }
+        @keyframes modalIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-close { position: absolute; top: 15px; right: 15px; font-size: 1.2rem; color: var(--text-muted); cursor: pointer; border: none; background: none; }
+
         /* SIDEBAR */
         .sidebar { width: 260px; background-color: var(--sidebar-bg); color: #ffffff; padding: 25px 20px; display: flex; flex-direction: column; flex-shrink: 0; border-right: 1px solid rgba(255,255,255,0.05); }
-        .sidebar-brand { display: flex; align-items: center; gap: 14px; margin-bottom: 35px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .sidebar-brand { display: flex; align-items: center; gap: 14px; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .sidebar-brand img { width: 42px; height: auto; }
         .sidebar-brand .title { font-weight: 700; font-size: 1.05rem; color: #ffffff; line-height: 1.2; }
         .sidebar-brand .subtitle { font-size: 0.75rem; color: #94a3b8; font-weight: 400; }
         
+        /* SELECTOR DE ROL */
+        .role-selector {
+            background: rgba(255,255,255,0.07); padding: 10px; border-radius: 10px; margin-bottom: 20px;
+        }
+        .role-selector label { font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 5px; }
+        .role-selector select { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff; font-size: 0.82rem; font-weight: 600; cursor: pointer; }
+
         .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 6px; }
         .sidebar-menu li a { display: flex; align-items: center; gap: 14px; padding: 12px 16px; color: var(--sidebar-text); text-decoration: none; border-radius: 8px; font-weight: 500; font-size: 0.92rem; transition: all 0.2s ease; cursor: pointer; }
         .sidebar-menu li.active a, .sidebar-menu li a:hover { background-color: var(--sidebar-hover); color: #ffffff; }
         .sidebar-menu li.active a { background-color: var(--sidebar-active); font-weight: 600; }
         
-        /* CRÉDITOS EN SIDEBAR */
         .sidebar-credits {
-            margin-top: auto;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255,255,255,0.08);
-            font-size: 0.75rem;
-            color: #94a3b8;
+            margin-top: auto; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.75rem; color: #94a3b8;
         }
         .sidebar-credits strong { color: #f8fafc; font-size: 0.8rem; display: block; margin-bottom: 6px; }
         .sidebar-credits ul { list-style: none; padding-left: 0; margin-top: 4px; }
@@ -77,63 +94,14 @@
         .main-content { flex-grow: 1; padding: 30px 40px; overflow-y: auto; max-height: 100vh; }
         .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
         .top-header h1 { font-size: 1.5rem; color: var(--text-main); font-weight: 700; }
+        .header-actions { display: flex; align-items: center; gap: 12px; }
         .user-badge { background: #ffffff; padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); border: 1px solid var(--border-color); display: flex; align-items: center; gap: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
+        .btn-scan-sim { background: var(--primary); color: #fff; border: none; padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
+        .btn-scan-sim:hover { background: var(--primary-hover); }
 
         /* SECTIONS / VIEWS */
         .view-section { display: none; }
         .view-section.active { display: block; }
-
-        /* MINI INTERFAZ QR (MODAL / TARJETA ESPECIAL) */
-        #qr-modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(4px);
-            z-index: 10000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        .qr-mobile-card {
-            background: #fff;
-            width: 100%;
-            max-width: 480px;
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--border-color);
-            animation: fadeInScale 0.3s ease;
-        }
-        @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        .qr-card-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 15px;
-            margin-bottom: 15px;
-        }
-        .qr-card-header i { font-size: 2rem; color: var(--primary); background: #ccfbf1; padding: 12px; border-radius: 12px; }
-        .qr-card-header h2 { font-size: 1.15rem; color: var(--text-main); font-weight: 700; }
-        .qr-card-header p { font-size: 0.8rem; color: var(--text-muted); }
-        
-        .qr-info-row { margin-bottom: 12px; font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--border-color); padding-bottom: 8px; }
-        .qr-info-row span:first-child { color: var(--text-muted); font-weight: 600; font-size: 0.82rem; }
-        .qr-info-row span:last-child { color: var(--text-main); font-weight: 700; text-align: right; }
-
-        .qr-fault-box {
-            background: var(--danger-bg);
-            border: 1px solid #fecaca;
-            padding: 12px;
-            border-radius: 8px;
-            margin: 15px 0;
-        }
-        .qr-fault-box .title-falla { font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--danger-text); margin-bottom: 4px; }
-        .qr-fault-box .desc-falla { font-size: 0.88rem; color: var(--text-main); font-weight: 600; }
 
         /* METRICS */
         .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 25px; }
@@ -209,51 +177,44 @@
         </div>
     </div>
 
-    <!-- MINI INTERFAZ QR (SE MUESTRA AL ESCANEAR DESDE EL MÓVIL) -->
-    <div id="qr-modal-overlay">
-        <div class="qr-mobile-card">
-            <div class="qr-card-header">
-                <i class="fa-solid fa-qrcode"></i>
-                <div>
-                    <h2>Ficha Técnica del Instrumento</h2>
-                    <p>Lectura directa por Código QR (Lab. UC)</p>
+    <!-- MODAL DE ATENCIÓN AL ESCANEAR UN CÓDIGO QR -->
+    <div id="modalScan" class="modal-overlay">
+        <div class="modal-card">
+            <button class="modal-close" onclick="cerrarModalScan()"><i class="fa-solid fa-xmark"></i></button>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <span class="status-badge status-operativo" id="modalEstadoBadge" style="margin-bottom: 8px;">Operativo</span>
+                <h2 id="modalNombreEquipo" style="font-size: 1.2rem; color: var(--text-main);">Osciloscopio Digital</h2>
+                <p id="modalCodigoEquipo" style="font-size: 0.83rem; color: var(--primary); font-weight: 700;">UC-OSC-DIG01</p>
+            </div>
+
+            <div style="background: #f8fafc; padding: 12px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 20px;">
+                <p><strong>Ubicación:</strong> <span id="modalUbicacion">Mesa #1</span></p>
+                <p><strong>Modelo:</strong> <span id="modalModelo">Tektronix TBS1052B</span></p>
+            </div>
+
+            <div class="panel-title" style="font-size: 0.95rem;">
+                <i class="fa-solid fa-triangle-exclamation" style="color: var(--warning-text);"></i> ¿Presenta alguna falla técnica?
+            </div>
+
+            <form onsubmit="procesarReporteModal(event)">
+                <div class="form-group">
+                    <label>Síntoma Observado</label>
+                    <select class="form-control" id="modalSintoma" required>
+                        <option value="Error / Descalibrado en Medición">Error / Descalibrado en Medición</option>
+                        <option value="No enciende / Sin alimentación">No enciende / Sin alimentación</option>
+                        <option value="Canal / Entrada defectuosa">Canal / Entrada defectuosa</option>
+                        <option value="Display / Aguja dañada">Display / Aguja dañada</option>
+                        <option value="Bornes / Cables rotos">Bornes / Cables rotos</option>
+                    </select>
                 </div>
-            </div>
-            
-            <div class="qr-info-row">
-                <span>Código QR:</span>
-                <span id="qrModalId" style="color: var(--primary);">--</span>
-            </div>
-            <div class="qr-info-row">
-                <span>Instrumento:</span>
-                <span id="qrModalNombre">--</span>
-            </div>
-            <div class="qr-info-row">
-                <span>Modelo:</span>
-                <span id="qrModalModelo">--</span>
-            </div>
-            <div class="qr-info-row">
-                <span>Ubicación:</span>
-                <span id="qrModalUbicacion">--</span>
-            </div>
-            <div class="qr-info-row">
-                <span>Estado Actual:</span>
-                <span id="qrModalEstadoBadge">--</span>
-            </div>
-
-            <div class="qr-fault-box">
-                <div class="title-falla"><i class="fa-solid fa-triangle-exclamation"></i> Diagnóstico / Reporte Activo</div>
-                <div class="desc-falla" id="qrModalReporte">Sin fallas registradas</div>
-            </div>
-
-            <div style="display: flex; gap: 10px; margin-top: 20px;">
-                <button onclick="resolverDesdeQR()" id="btnResolverQR" style="flex: 1; padding: 12px; background: var(--success-bg); color: var(--success-text); border: 1px solid #a7f3d0; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">
-                    ✅ Marcar Operativo
+                <div class="form-group">
+                    <label>Detalles del Problema</label>
+                    <textarea class="form-control" id="modalDetalles" rows="2" placeholder="Explique brevemente lo que ocurre..." required></textarea>
+                </div>
+                <button type="submit" class="btn-submit">
+                    <i class="fa-solid fa-paper-plane"></i> Registrar Reporte de Falla
                 </button>
-                <button onclick="cerrarMiniModalQR()" style="flex: 1; padding: 12px; background: var(--sidebar-bg); color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">
-                    🏠 Ir al Panel Completo
-                </button>
-            </div>
+            </form>
         </div>
     </div>
 
@@ -266,12 +227,22 @@
                 <div class="subtitle">Mediciones Eléctricas</div>
             </div>
         </div>
+
+        <!-- SELECTOR DE ROL -->
+        <div class="role-selector">
+            <label><i class="fa-solid fa-user-gear"></i> Modo de Acceso:</label>
+            <select id="selectRol" onchange="cambiarRol()">
+                <option value="estudiante">👨‍🎓 Estudiante / Estándar</option>
+                <option value="tecnico">🛠️ Técnico / Administrador</option>
+            </select>
+        </div>
+
         <ul class="sidebar-menu">
             <li id="menu-dashboard" class="active"><a onclick="cambiarVista('dashboard')"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
             <li id="menu-inventario"><a onclick="cambiarVista('inventario')"><i class="fa-solid fa-boxes-stacked"></i> Inventario de Equipos</a></li>
             <li id="menu-guias"><a onclick="cambiarVista('guias')"><i class="fa-solid fa-graduation-cap"></i> Guía de Uso</a></li>
             <li id="menu-qr"><a onclick="cambiarVista('qr')"><i class="fa-solid fa-qrcode"></i> Generador de QR</a></li>
-            <li id="menu-mantenimiento"><a onclick="cambiarVista('mantenimiento')"><i class="fa-solid fa-screwdriver-wrench"></i> Mantenimiento</a></li>
+            <li id="menu-mantenimiento" class="solo-tecnico"><a onclick="cambiarVista('mantenimiento')"><i class="fa-solid fa-screwdriver-wrench"></i> Mantenimiento</a></li>
         </ul>
         
         <!-- SECCIÓN DE CRÉDITOS Y COLABORADORES -->
@@ -294,8 +265,11 @@
         
         <div class="top-header">
             <h1 id="tituloVista">Dashboard General</h1>
-            <div class="user-badge">
-                <i class="fa-solid fa-user-gear" style="color: var(--primary);"></i> Operador / Técnico UC
+            <div class="header-actions">
+                <button class="btn-scan-sim" onclick="simularEscaneoQR()"><i class="fa-solid fa-qrcode"></i> Simular Escaneo QR</button>
+                <div class="user-badge" id="badgeRol">
+                    <i class="fa-solid fa-user-graduate" style="color: var(--primary);"></i> Modo Estudiante
+                </div>
             </div>
         </div>
 
@@ -406,6 +380,7 @@
                                 <th>Modelo / Especificación</th>
                                 <th>Ubicación</th>
                                 <th>Estado</th>
+                                <th>Acción</th>
                             </tr>
                         </thead>
                         <tbody id="tablaInventarioCompleto"></tbody>
@@ -541,7 +516,7 @@
                             <tr>
                                 <th>Código</th>
                                 <th>Instrumento</th>
-                                <th>Fecha Reporte</th>
+                                <th>Estado</th>
                                 <th>Problema Reportado</th>
                                 <th>Acción</th>
                             </tr>
@@ -555,6 +530,8 @@
     </main>
 
     <script>
+        let equipoActualEscaneado = null;
+
         let inventarioUC = JSON.parse(localStorage.getItem('inventario_uc_db')) || [
             { id: "UC-OSC-DIG01", nombre: "Osciloscopio Digital 2 Canales", tipo: "Osciloscopio Digital", modelo: "Tektronix TBS1052B", ubicacion: "Mesa #1", estado: "Operativo", reporte: "Sin fallas" },
             { id: "UC-OSC-DIG02", nombre: "Osciloscopio Digital 2 Canales", tipo: "Osciloscopio Digital", modelo: "Tektronix TBS1052B", ubicacion: "Mesa #2", estado: "Operativo", reporte: "Sin fallas" },
@@ -578,7 +555,22 @@
             { id: "UC-DEC-CAP01", nombre: "Caja de Décadas de Capacitancia", tipo: "Componente Pasivo", modelo: "IET Labs CS-300", ubicacion: "Estante B", estado: "Operativo", reporte: "Sin fallas" }
         ];
 
-        let equipoEscaneadoIdActual = null;
+        function cambiarRol() {
+            const rol = document.getElementById('selectRol').value;
+            const badge = document.getElementById('badgeRol');
+            const opcionesTecnico = document.querySelectorAll('.solo-tecnico');
+
+            if(rol === 'tecnico') {
+                badge.innerHTML = `<i class="fa-solid fa-user-gear" style="color: var(--primary);"></i> Modo Técnico / Admin`;
+                opcionesTecnico.forEach(e => e.style.display = 'block');
+            } else {
+                badge.innerHTML = `<i class="fa-solid fa-user-graduate" style="color: var(--primary);"></i> Modo Estudiante`;
+                opcionesTecnico.forEach(e => e.style.display = 'none');
+                cambiarVista('dashboard');
+            }
+            renderizarMantenimiento();
+            renderizarInventarioCompleto();
+        }
 
         function cambiarVista(nombreVista) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
@@ -642,11 +634,17 @@
 
         function renderizarInventarioCompleto() {
             const tbody = document.getElementById('tablaInventarioCompleto');
+            const esTecnico = document.getElementById('selectRol').value === 'tecnico';
             tbody.innerHTML = '';
+
             inventarioUC.forEach(eq => {
                 let badgeClass = "status-operativo";
                 if(eq.estado === "En Revisión") badgeClass = "status-revision";
                 if(eq.estado === "Fuera de Servicio") badgeClass = "status-falla";
+
+                let btnAccion = esTecnico ? 
+                    `<button onclick="abrirModalPorId('${eq.id}')" style="padding:4px 10px; background:var(--primary); color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:0.75rem;">Reportar / Ver</button>` : 
+                    `<button onclick="abrirModalPorId('${eq.id}')" style="padding:4px 10px; background:#e2e8f0; color:var(--text-main); border:none; border-radius:6px; cursor:pointer; font-size:0.75rem;">Ver Ficha</button>`;
 
                 let tr = document.createElement('tr');
                 tr.innerHTML = `
@@ -656,6 +654,7 @@
                     <td>${eq.modelo}</td>
                     <td>${eq.ubicacion}</td>
                     <td><span class="status-badge ${badgeClass}">${eq.estado}</span></td>
+                    <td>${btnAccion}</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -674,7 +673,7 @@
                     <img src="${qrApi}" alt="QR ${eq.id}">
                     <h4>${eq.id}</h4>
                     <p>${eq.nombre}</p>
-                    <a href="${qrApi}" target="_blank" style="font-size:0.75rem; color:var(--primary); text-decoration:none; font-weight:700;">📥 Descargar QR</a>
+                    <button onclick="abrirModalPorId('${eq.id}')" style="font-size:0.75rem; background:var(--primary); color:#fff; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:700;">📲 Probar QR</button>
                 `;
                 contenedor.appendChild(card);
             });
@@ -682,6 +681,7 @@
 
         function renderizarMantenimiento() {
             const tbody = document.getElementById('tablaMantenimiento');
+            const esTecnico = document.getElementById('selectRol').value === 'tecnico';
             tbody.innerHTML = '';
             let revisiones = inventarioUC.filter(e => e.estado !== 'Operativo');
 
@@ -691,25 +691,63 @@
             }
 
             revisiones.forEach(eq => {
+                let btnResolver = esTecnico ? 
+                    `<button onclick="marcarOperativo('${eq.id}')" style="padding:6px 12px; background:var(--primary); color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:0.8rem; font-weight:600;">✅ Resolver / Calibrar</button>` : 
+                    `<span style="font-size:0.78rem; color:var(--text-muted);">Solo Técnicos</span>`;
+
                 let tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td><strong>${eq.id}</strong></td>
                     <td>${eq.nombre}</td>
-                    <td>Reciente</td>
+                    <td><span class="status-badge status-revision">${eq.estado}</span></td>
                     <td style="color:var(--danger-text); font-weight:600;">${eq.reporte}</td>
-                    <td><button onclick="marcarOperativo('${eq.id}')" style="padding:6px 12px; background:var(--primary); color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:0.8rem; font-weight:600;">✅ Resolver / Calibrar</button></td>
+                    <td>${btnResolver}</td>
                 `;
                 tbody.appendChild(tr);
             });
+        }
+
+        function abrirModalPorId(id) {
+            let eq = inventarioUC.find(item => item.id === id);
+            if(eq) {
+                equipoActualEscaneado = eq;
+                document.getElementById('modalNombreEquipo').innerText = eq.nombre;
+                document.getElementById('modalCodigoEquipo').innerText = eq.id;
+                document.getElementById('modalUbicacion').innerText = eq.ubicacion;
+                document.getElementById('modalModelo').innerText = eq.modelo;
+                document.getElementById('modalEstadoBadge').innerText = eq.estado;
+                document.getElementById('modalScan').classList.add('active');
+            }
+        }
+
+        function cerrarModalScan() {
+            document.getElementById('modalScan').classList.remove('active');
+        }
+
+        function simularEscaneoQR() {
+            let aleatorio = inventarioUC[Math.floor(Math.random() * inventarioUC.length)];
+            abrirModalPorId(aleatorio.id);
         }
 
         function mostrarNotificacion(texto) {
             const toast = document.getElementById('toast');
             document.getElementById('toastSubText').innerText = texto;
             toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 4000);
+            setTimeout(() => { toast.classList.remove('show'); }, 4000);
+        }
+
+        function procesarReporteModal(e) {
+            e.preventDefault();
+            const sintoma = document.getElementById('modalSintoma').value;
+            const detalles = document.getElementById('modalDetalles').value;
+
+            if(equipoActualEscaneado) {
+                equipoActualEscaneado.estado = "En Revisión";
+                equipoActualEscaneado.reporte = `${sintoma}: ${detalles}`;
+                actualizarSistema();
+                cerrarModalScan();
+                mostrarNotificacion(`Reporte enviado para ${equipoActualEscaneado.id}. Pasa a revisión.`);
+            }
         }
 
         function procesarReporte(e) {
@@ -739,60 +777,14 @@
             }
         }
 
-        /* MANEJO DE LA MINI INTERFAZ QR */
-        function mostrarMiniInterfazQR(eq) {
-            equipoEscaneadoIdActual = eq.id;
-            document.getElementById('qrModalId').innerText = eq.id;
-            document.getElementById('qrModalNombre').innerText = eq.nombre;
-            document.getElementById('qrModalModelo').innerText = eq.modelo;
-            document.getElementById('qrModalUbicacion').innerText = eq.ubicacion;
-            
-            let badgeClass = "status-operativo";
-            if(eq.estado === "En Revisión") badgeClass = "status-revision";
-            if(eq.estado === "Fuera de Servicio") badgeClass = "status-falla";
-
-            document.getElementById('qrModalEstadoBadge').innerHTML = `<span class="status-badge ${badgeClass}">${eq.estado}</span>`;
-            document.getElementById('qrModalReporte').innerText = eq.reporte;
-
-            // Ocultar botón de resolver si ya está operativo
-            const btnRes = document.getElementById('btnResolverQR');
-            if(eq.estado === "Operativo") {
-                btnRes.style.display = "none";
-            } else {
-                btnRes.style.display = "block";
-            }
-
-            document.getElementById('qr-modal-overlay').style.display = 'flex';
-        }
-
-        function cerrarMiniModalQR() {
-            document.getElementById('qr-modal-overlay').style.display = 'none';
-            // Limpiar la URL sin recargar para que si navega por el panel no se abra de nuevo
-            window.history.replaceState({}, document.title, window.location.pathname);
-        }
-
-        function resolverDesdeQR() {
-            if(equipoEscaneadoIdActual) {
-                let eq = inventarioUC.find(item => item.id === equipoEscaneadoIdActual);
-                if(eq) {
-                    eq.estado = "Operativo";
-                    eq.reporte = "Sin fallas";
-                    actualizarSistema();
-                    mostrarNotificacion(`El equipo ${eq.id} fue marcado como Operativo.`);
-                    cerrarMiniModalQR();
-                }
-            }
-        }
-
         window.onload = function() {
+            cambiarRol();
             actualizarSistema();
+
             const urlParams = new URLSearchParams(window.location.search);
             const equipoParam = urlParams.get('equipo');
             if(equipoParam) {
-                let eq = inventarioUC.find(item => item.id === equipoParam);
-                if(eq) {
-                    mostrarMiniInterfazQR(eq);
-                }
+                abrirModalPorId(equipoParam);
             }
         };
     </script>
